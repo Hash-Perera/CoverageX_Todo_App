@@ -1,0 +1,7 @@
+<div class="toaster-container">
+  <div *ngFor="let toast of toasts$ | async" class="toast toast-{{ toast.type }}" [@toastAnimation]>
+    <div class="toast-icon">{{ getIcon(toast.type) }}</div>
+    <div class="toast-message">{{ toast.message }}</div>
+    <button class="toast-close" (click)="closeToast(toast.id)">×</button>
+  </div>
+</div>

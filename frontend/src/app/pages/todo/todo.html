@@ -1,0 +1,198 @@
+<div class="modern-todo-container">
+  <!-- Header Section -->
+  <div class="header-section" [@slideIn]>
+    <div class="container">
+      <div class="text-center text-white mb-5">
+        <h1 class="display-4 fw-bold mb-3">
+          <i class="bi bi-check2-square me-3"></i>
+          Task Manager
+        </h1>
+        <p class="lead">Organize your tasks efficiently and boost your productivity</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="container pb-5">
+    <div class="row g-4">
+      <!-- Add Task Card -->
+      <div class="col-lg-5">
+        <div class="modern-card add-task-card" [@slideIn]>
+          <div class="card-header-modern">
+            <div class="d-flex align-items-center">
+              <div class="icon-wrapper bg-primary">
+                <i class="bi bi-plus-circle-fill"></i>
+              </div>
+              <div>
+                <h3 class="mb-0">Add New Task</h3>
+                <small class="text-muted">Create a task to stay organized</small>
+              </div>
+            </div>
+          </div>
+
+          <div class="card-body-modern">
+            <form [formGroup]="taskForm" (ngSubmit)="onSubmit()">
+              <!-- Title Input -->
+              <div class="mb-4">
+                <label for="title" class="form-label d-flex align-items-center">
+                  <i class="bi bi-type me-2 text-primary"></i>
+                  <span class="fw-semibold">Task Title</span>
+                  <span class="text-danger ms-1">*</span>
+                </label>
+                <div class="input-group input-group-modern">
+                  <span class="input-group-text">
+                    <i class="bi bi-pencil-fill"></i>
+                  </span>
+                  <input
+                    type="text"
+                    id="title"
+                    formControlName="title"
+                    class="form-control form-control-lg"
+                    placeholder="e.g., Complete project documentation"
+                    [class.is-invalid]="isFieldInvalid('title')"
+                  />
+                </div>
+                <div class="invalid-feedback d-block" *ngIf="isFieldInvalid('title')">
+                  <i class="bi bi-exclamation-circle-fill me-1"></i>
+                  {{ getErrorMessage('title') }}
+                </div>
+              </div>
+
+              <!-- Description Input -->
+              <div class="mb-4">
+                <label for="description" class="form-label d-flex align-items-center">
+                  <i class="bi bi-text-paragraph me-2 text-primary"></i>
+                  <span class="fw-semibold">Description</span>
+                  <span class="text-danger ms-1">*</span>
+                </label>
+                <div class="input-group input-group-modern">
+                  <span class="input-group-text align-items-start pt-3">
+                    <i class="bi bi-card-text"></i>
+                  </span>
+                  <textarea
+                    id="description"
+                    formControlName="description"
+                    class="form-control form-control-lg"
+                    placeholder="Describe your task in detail..."
+                    rows="4"
+                    [class.is-invalid]="isFieldInvalid('description')"
+                  ></textarea>
+                </div>
+                <div class="invalid-feedback d-block" *ngIf="isFieldInvalid('description')">
+                  <i class="bi bi-exclamation-circle-fill me-1"></i>
+                  {{ getErrorMessage('description') }}
+                </div>
+              </div>
+
+              <!-- Submit Button -->
+              <button
+                type="submit"
+                class="btn btn-primary btn-lg w-100 btn-modern"
+                [disabled]="taskForm.invalid"
+              >
+                <i class="bi bi-plus-circle me-2"></i>
+                Add Task
+                <i class="bi bi-arrow-right ms-2"></i>
+              </button>
+            </form>
+          </div>
+        </div>
+
+        <!-- Stats Card -->
+        <div class="modern-card stats-card mt-4" [@slideIn]>
+          <div class="card-body-modern">
+            <div class="d-flex justify-content-between align-items-center">
+              <div>
+                <h6 class="text-muted mb-1">Active Tasks</h6>
+                <h2 class="mb-0 fw-bold" [@countBadge]="taskCount">{{ taskCount }}</h2>
+              </div>
+              <div class="icon-wrapper-large bg-success-subtle">
+                <i class="bi bi-list-task text-success"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Task List Card -->
+      <div class="col-lg-7">
+        <div class="modern-card task-list-card" [@slideIn]>
+          <div class="card-header-modern">
+            <div class="d-flex align-items-center justify-content-between">
+              <div class="d-flex align-items-center">
+                <div class="icon-wrapper bg-success">
+                  <i class="bi bi-clipboard-check-fill"></i>
+                </div>
+                <div>
+                  <h3 class="mb-0">Recent Tasks</h3>
+                  <small class="text-muted">Your latest 5 tasks</small>
+                </div>
+              </div>
+              <span class="badge bg-primary rounded-pill px-3 py-2" [@countBadge]="taskCount">
+                {{ taskCount }} {{ taskCount === 1 ? 'Task' : 'Tasks' }}
+              </span>
+            </div>
+          </div>
+
+          <div class="card-body-modern">
+            <div class="task-list-modern">
+              <!-- Task Items -->
+              <div
+                *ngFor="let task of tasks$ | async; let i = index; trackBy: trackByTaskId"
+                class="task-item-modern"
+                [@taskAnimation]
+              >
+                <div class="task-number">{{ i + 1 }}</div>
+                <div class="task-content-modern">
+                  <div class="d-flex justify-content-between align-items-start mb-2">
+                    <h5 class="task-title-modern mb-0">
+                      <i class="bi bi-circle-fill text-primary me-2"></i>
+                      {{ task.title }}
+                    </h5>
+                    <button
+                      class="btn btn-success btn-sm btn-done-modern"
+                      (click)="completeTask(task.id)"
+                    >
+                      <i class="bi bi-check-lg"></i>
+                      Done
+                    </button>
+                  </div>
+                  <p class="task-description-modern mb-2">{{ task.description }}</p>
+                  <div class="task-meta">
+                    <span class="badge bg-light text-dark">
+                      <i class="bi bi-clock me-1"></i>
+                      {{ task.createdAt | date : 'MMM d, y, h:mm a' }}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Empty State -->
+              <div *ngIf="(tasks$ | async)?.length === 0" class="empty-state-modern" [@fadeIn]>
+                <div class="empty-icon-wrapper">
+                  <i class="bi bi-inbox"></i>
+                </div>
+                <h4 class="mt-4 mb-2">No Tasks Yet</h4>
+                <p class="text-muted mb-4">Start adding tasks to organize your work efficiently</p>
+                <div class="features-grid">
+                  <div class="feature-item">
+                    <i class="bi bi-check-circle text-success"></i>
+                    <span>Easy to use</span>
+                  </div>
+                  <div class="feature-item">
+                    <i class="bi bi-lightning text-warning"></i>
+                    <span>Quick actions</span>
+                  </div>
+                  <div class="feature-item">
+                    <i class="bi bi-save text-primary"></i>
+                    <span>Auto-save</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

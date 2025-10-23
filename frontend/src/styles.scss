@@ -1,1 +1,236 @@
 /* You can add global styles to this file, and also import other style files */
+@use 'bootstrap' as *;
+@use 'ngx-toastr/toastr' as *;
+@import 'bootstrap-icons/font/bootstrap-icons.css';
+
+// CSS Variables
+:root {
+  --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --success-color: #48bb78;
+  --danger-color: #f56565;
+  --warning-color: #ed8936;
+  --info-color: #4299e1;
+  --dark-text: #2d3748;
+  --light-text: #718096;
+}
+
+// Global Reset
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+  background: #f8fafc;
+}
+
+// Custom Scrollbar
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #5568d3 0%, #6a3f8f 100%);
+}
+
+// Enhanced Toastr Styles
+#toast-container {
+  > div {
+    opacity: 1;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+    border-radius: 12px;
+    padding: 18px 24px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    min-width: 350px;
+
+    @media (max-width: 575.98px) {
+      min-width: 300px;
+      padding: 15px 20px;
+    }
+  }
+
+  .toast-message {
+    font-weight: 500;
+    font-size: 0.95rem;
+    line-height: 1.5;
+  }
+
+  .toast-title {
+    font-weight: 700;
+    font-size: 1.05rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .toast-close-button {
+    position: relative;
+    right: -0.5rem;
+    top: -0.5rem;
+    font-weight: 700;
+    text-shadow: none;
+    opacity: 0.8;
+    font-size: 1.25rem;
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+
+  .toast-progress {
+    height: 4px;
+    opacity: 0.8;
+    border-radius: 2px;
+  }
+}
+
+// Toast Success
+.toast-success {
+  background-color: rgba(72, 187, 120, 0.95) !important;
+
+  .toast-progress {
+    background-color: #38a169 !important;
+  }
+
+  &:hover {
+    box-shadow: 0 15px 50px rgba(72, 187, 120, 0.4) !important;
+  }
+}
+
+// Toast Error
+.toast-error {
+  background-color: rgba(245, 101, 101, 0.95) !important;
+
+  .toast-progress {
+    background-color: #e53e3e !important;
+  }
+
+  &:hover {
+    box-shadow: 0 15px 50px rgba(245, 101, 101, 0.4) !important;
+  }
+}
+
+// Toast Info
+.toast-info {
+  background-color: rgba(66, 153, 225, 0.95) !important;
+
+  .toast-progress {
+    background-color: #3182ce !important;
+  }
+
+  &:hover {
+    box-shadow: 0 15px 50px rgba(66, 153, 225, 0.4) !important;
+  }
+}
+
+// Toast Warning
+.toast-warning {
+  background-color: rgba(237, 137, 54, 0.95) !important;
+
+  .toast-progress {
+    background-color: #dd6b20 !important;
+  }
+
+  &:hover {
+    box-shadow: 0 15px 50px rgba(237, 137, 54, 0.4) !important;
+  }
+}
+
+// Toast Animations
+@keyframes toastSlideIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes toastSlideOut {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+#toast-container > div {
+  animation: toastSlideIn 0.3s ease-out;
+}
+
+// Button Focus Styles
+.btn:focus,
+.form-control:focus,
+.form-select:focus {
+  box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+}
+
+// Smooth Transitions
+* {
+  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease, opacity 0.2s ease;
+}
+
+// Loading Spinner (if needed)
+.spinner-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  backdrop-filter: blur(5px);
+}
+
+// Utility Classes
+.gradient-text {
+  background: var(--primary-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.glass-effect {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+// Print Styles
+@media print {
+  .modern-todo-container {
+    background: white !important;
+  }
+
+  .btn,
+  .badge {
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+}
